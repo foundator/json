@@ -44,7 +44,22 @@ You can read and write JSON data structures via the `Json` object:
 
 
 ```scala
-val compact = Json.write(json, None) // Write to a string with no indentation or line breaks.
-val pretty = Json.write(json, Some("    ")) // Write to a string with 4 spaces of indentation and line breaks.
-Json.write(new File("myfile.json"), json, None) // You can also write directly to a file, stream or writer.
+val compact = Json.write(json, None)
+val pretty = Json.write(json, Some("    "))
+Json.write(new File("myfile.json"), json, None)
 ```
+
+* The first example returns the JSON as a string with no indentation or line breaks. 
+* The second example is similar, but pretty prints the JSON with the given 4 spaces of indentation.
+* The third example writes to a file instead. You can also write to a stream (UTF-8) or a writer (any encoding).
+
+Deserialization
+---------------
+
+```scala
+val a = Json.read(compact) // or pretty
+val b = Json.read(new File("myfile.json"))
+```
+
+* The first example reads the JSON data structure from the provided string. 
+* The second example reads from a file instead. You can also read from a stream (will detect UTF-8 and both endian variants of UTF-16 and UTF-32), or a reader.
