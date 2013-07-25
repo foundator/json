@@ -28,7 +28,7 @@ Usage
 In order to build up JSON values, simply use the above constructors, eg:
 
 ```scala
-val json = JsonObject (
+val json = JsonObject(
     "x" -> JsonNumber(0),
     "y" -> JsonNumber(1)
 )
