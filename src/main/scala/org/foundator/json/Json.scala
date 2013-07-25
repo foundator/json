@@ -154,7 +154,7 @@ object Json {
                 case JsonNumber(number) =>
                     val text = number.toString
                     if(text.startsWith(".")) writer.write('0')
-                    writer.write(text)
+                    writer.write(if(text.endsWith(".0")) text.dropRight(2) else text)
                 case JsonBoolean(value) =>
                     writer.write(if(value) "true" else "false")
                 case JsonNull =>
@@ -203,9 +203,11 @@ object Json {
             case Array(0xFE, 0xFF, _,    _   ) => (2, "UTF-16BE")  // BOM
             case Array(0xFF, 0xFE, _,    _   ) => (2, "UTF-16LE")  // BOM
             case Array(0,    0,    0,    _   ) => (0, "UTF-32BE")  // One ASCII character
-            case Array(0,    _,    0,    _   ) => (0, "UTF-16BE")  // Two ASCII characters
             case Array(_,    0,    0,    0   ) => (0, "UTF-32LE")  // One ASCII character
+            case Array(0,    _,    0,    _   ) => (0, "UTF-16BE")  // Two ASCII characters
             case Array(_,    0,    _,    0   ) => (0, "UTF-16LE")  // Two ASCII characters
+            case Array(0,    _               ) => (0, "UTF-16BE")  // One ASCII character
+            case Array(_,    0               ) => (0, "UTF-16LE")  // One ASCII character
             case Array(0xEF, 0xBB, 0xBF, _   ) => (3, "UTF-8")     // BOM
             case _ => (0, "UTF-8")
         }
