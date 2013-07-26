@@ -87,4 +87,4 @@ What happens if this project is abandoned?
 
 Nothing. This library already works and is feature complete. Its source and its binary are both hosted by 3rd parties that are very unlikely to disappear.
 
-Don't get me wrong. There are plenty of other functionality one might want when dealing with JSON, such as automatic conversion from and to user defined types. However, these do not belong in the core JSON library - they should be in a seperate library.
+Don't get me wrong. There are plenty of other functionality one might want when dealing with JSON, such as automatic conversion from and to user defined types. However, these do not belong in the core JSON library - they should be in a separate library.
