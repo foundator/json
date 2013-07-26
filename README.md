@@ -1,9 +1,9 @@
-json
-====
+foundator-json
+==============
 
 A simple and fast JSON library for Scala.
 
-There are a ton of JSON libraries for Scala out there, but I was fustrated with their complexity and magic. "What on earth is so complicated about JSON?" I thought. Well, the answer is nothing. Hence this library.
+There are [a ton of JSON libraries for Scala](#other) out there, but I was fustrated with their complexity and magic. ["What on earth is so complicated about JSON?" I thought. Well, the answer is nothing. Hence this library.
 
 
 Data Structure
@@ -55,6 +55,7 @@ Json.write(new File("myfile.json"), json, None)
 * The second example is similar, but pretty prints the JSON with the given 4 spaces of indentation.
 * The third example writes to a file instead. You can also write to a stream (UTF-8) or a writer (any encoding).
 
+
 Deserialization
 ---------------
 
@@ -65,3 +66,15 @@ val b = Json.read(new File("myfile.json"))
 
 * The first example reads the JSON data structure from the provided string. 
 * The second example reads from a file instead. You can also read from a stream (will detect UTF-8 and both endian variants of UTF-16 and UTF-32), or a reader.
+
+
+<a id="other">Other libraries</a>
+===============
+
+And why I don't like them.
+
+* Scala's standard JSON type: Uses `Any` to represent the JSON types `Number`, `String`, `Boolean` and `Null`, defeating type safety.
+* The Play JSON library: Has `JsUndefined` ... but there's no such thing in JSON! Also, is not a self-contained library - you have to depende on the whole Play framework.
+* Argonaut: Has data structure much like the foundator-json library - unfortunately, it's off limits for library users, since it's private.
+
+There are many more, but I think you get the gist of it.
