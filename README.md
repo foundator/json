@@ -77,4 +77,4 @@ And why I don't like them.
 * The Play JSON library: Has `JsUndefined` ... but there's no such thing in JSON! Also, is not a self-contained library - you have to depende on the whole Play framework.
 * Argonaut: Has data structure much like the foundator-json library - unfortunately, it's off limits for library users, since it's private.
 
-There are many more, but I think you get the gist of it.
+There are many more, but that's the gist of it.
