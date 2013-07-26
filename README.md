@@ -76,5 +76,6 @@ And why I don't like them.
 * Scala's standard JSON type: Uses `Any` to represent the JSON types `Number`, `String`, `Boolean` and `Null`, defeating type safety.
 * The Play JSON library: Has `JsUndefined` ... but there's no such thing in JSON! Also, is not a self-contained library - you have to depende on the whole Play framework.
 * Argonaut: Has data structure much like the foundator-json library - unfortunately, it's off limits for library users, since it's private.
+* Jerkson: Has a data structure where `JField` can occur anywhere, even outside objects.
 
 There are many more, but that's the gist of it.
