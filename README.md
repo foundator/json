@@ -71,7 +71,7 @@ val b = Json.read(new File("myfile.json"))
 Other JSON libraries
 ====================
 
-And why I don't like them.
+And why they're broken in my opinion.
 
 * Scala's standard JSON type: Uses `Any` to represent the JSON types `Number`, `String`, `Boolean` and `Null`, defeating type safety.
 * The Play JSON library: Has `JsUndefined` ... but there's no such thing in JSON! Also, is not a self-contained library - you have to depende on the whole Play framework.
