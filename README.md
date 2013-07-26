@@ -78,4 +78,12 @@ And why they're broken in my opinion.
 * Argonaut: Has data structure much like the foundator-json library - unfortunately, it's off limits for library users, since it's private.
 * Jerkson: Has a data structure where `JField` can occur anywhere, even outside objects.
 
-There are many more, but that's the gist of it.
+But that's not their biggest fault. Their worst fault is to use a bunch of `implicit` magic for solving such a tivial problem. There are many more of course.
+
+
+What happens if this project is abandoned?
+------------------------------------------
+
+Nothing. This library already works and is feature complete. Its source and its binary are both hosted by 3rd parties that are very unlikely to disappear.
+
+Don't get me wrong. There are plenty of other functionality one might want when dealing with JSON, such as automatic conversion from and to user defined types. However, these do not belong in the core JSON library - they should be in a seperate library.
