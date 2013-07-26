@@ -77,8 +77,9 @@ And why they're broken in my opinion.
 * The Play JSON library: Has `JsUndefined` ... but there's no such thing in JSON! Also, is not a self-contained library - you have to depende on the whole Play framework.
 * Argonaut: Has data structure much like the foundator-json library - unfortunately, it's off limits for library users, since it's private.
 * Jerkson: Has a data structure where `JField` can occur anywhere, even outside objects.
+* And many, many more.
 
-But that's not their biggest fault. Their worst fault is to use a bunch of `implicit` magic for solving such a tivial problem. There are many more of course.
+Many of these also expose a large and complex API, which is very strange given the triviality of the core problem.
 
 
 What happens if this project is abandoned?
