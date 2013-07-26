@@ -3,7 +3,7 @@ foundator-json
 
 A simple and fast JSON library for Scala.
 
-There are [a ton of JSON libraries for Scala](#other) out there, but I was fustrated with their complexity and magic. ["What on earth is so complicated about JSON?" I thought. Well, the answer is nothing. Hence this library.
+There are [a ton of JSON libraries for Scala](#other-json-libraries) out there, but I was fustrated with their complexity and magic. ["What on earth is so complicated about JSON?" I thought. Well, the answer is nothing. Hence this library.
 
 
 Data Structure
@@ -68,8 +68,8 @@ val b = Json.read(new File("myfile.json"))
 * The second example reads from a file instead. You can also read from a stream (will detect UTF-8 and both endian variants of UTF-16 and UTF-32), or a reader.
 
 
-<a id="other">Other libraries</a>
-===============
+Other JSON libraries
+====================
 
 And why I don't like them.
 
