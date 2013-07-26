@@ -3,7 +3,7 @@ foundator-json
 
 A simple and fast JSON library for Scala.
 
-There are [a ton of JSON libraries for Scala](#other-json-libraries) out there, but I was fustrated with their complexity and magic. ["What on earth is so complicated about JSON?" I thought. Well, the answer is nothing. Hence this library.
+There are [a ton of JSON libraries for Scala](#other-json-libraries) out there, but I was fustrated with their complexity and magic. "What on earth is so complicated about JSON?" I thought. Well, the answer is nothing. Hence this library.
 
 
 Data Structure
