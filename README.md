@@ -36,13 +36,7 @@ val json = JsonObject(
 )
 ```
 
-Data binding and conversion to and from user defined types is a non-goal of this library, since we feel that it doesn't belong in a core JSON library.
-
-
-Querying
---------
-
-You can either use plain old pattern matching on the `Json` data structure, or you can use the following query methods:
+For queries, you can either use plain old pattern matching on the `Json` data structure, or you can use the following query methods:
 
 | Invocation | Target | Result | Description |
 |------------|--------|--------|-------------|
@@ -119,4 +113,4 @@ What happens if this project is abandoned?
 
 Nothing. This library already works and is feature complete. Its source and its binary are both hosted by 3rd parties that are very unlikely to disappear.
 
-Don't get me wrong. There are plenty of other functionality one might want when dealing with JSON, such as automatic conversion from and to user defined types, streaming and querying. However, these do not belong in the core JSON library - they should be in a separate library.
+Don't get me wrong. There are plenty of other functionality one might want when dealing with JSON, such as automatic conversion from and to user defined types and streaming. However, these do not belong in the core JSON library - they should be in a separate library.
