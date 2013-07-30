@@ -74,9 +74,9 @@ You can read and write JSON data structures via the `Json` object:
 
 
 ```scala
-val compact = Json.write(json, None)
-val pretty = Json.write(json, Some("    "))
-Json.write(new File("myfile.json"), json, None)
+val compact = Json.write(j, None)
+val pretty = Json.write(j, Some("    "))
+Json.write(new File("myfile.json"), j, None)
 ```
 
 * The first example returns the JSON as a string with no indentation or line breaks. 
