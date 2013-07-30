@@ -32,7 +32,7 @@ In order to build up JSON values, simply use the above constructors, eg:
 ```scala
 val j = JsonObject(
     "address" -> JsonObject("city" -> JsonString("Copenhagen")),
-    "luckyNumbers" -> JsonArray(7, 13, 42)
+    "luckyNumbers" -> JsonArray(JsonNumber(7), JsonNumber(13))
 )
 ```
 
