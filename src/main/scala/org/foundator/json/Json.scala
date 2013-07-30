@@ -433,6 +433,15 @@ case class ParseJsonException(message : String, line : Int, column : Int)
     extends RuntimeException(message + " at line " + line + ", column " + column)
 
 
+/** Implicit conversions to `Json` from the primitive types. */
+object ConvertJson {
+    implicit def fromNumber(value : Int) : Json = JsonNumber(value)
+    implicit def fromNumber(value : Double) : Json = JsonNumber(value)
+    implicit def fromString(value : String) : Json = if(value == null) JsonNull else JsonString(value)
+    implicit def fromBoolean(value : Boolean) : Json = JsonBoolean(value)
+    implicit def fromNull(value : Null) : Json = JsonNull
+}
+
 /**
  * This base class is what adds querying to the Json data structure (beyond pattern matching).
  * The act on the Json data structure as if it was dynamically typed, but returns the result in an `Option[T]` to regain
@@ -440,8 +449,8 @@ case class ParseJsonException(message : String, line : Int, column : Int)
  *
  * Some examples:
  * {{{
- * val info = JsonObject(
- *     "address" -> JsonObject("city" -> "Copenhagen", "street" -> "Vesterbrogade"),
+ * val j = JsonObject(
+ *     "address" -> JsonObject("city" -> "Copenhagen"),
  *     "luckyNumbers" -> JsonArray(7, 13, 42)
  * )
  * val Some(city) = info("address", "city").string
@@ -449,7 +458,7 @@ case class ParseJsonException(message : String, line : Int, column : Int)
  * }}}
  * After running the above, `city == "Copenhagen"` and `lucky == 13`.
  */
-sealed abstract class DynamicJsonOperations { this : Json =>
+sealed abstract class DynamicJsonOperations extends NotNull { this : Json =>
     /**
      * Lookup for JsonObjects. Returns None if the fields doesn't exist or this is not a JsonObject.
      * Note that you can use multiple labels to reach deep into the object graph, eg. myJson("address", "city").

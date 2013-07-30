@@ -75,6 +75,20 @@ class TestJson extends FunSuite {
         assert(json8.members === Some(Map()))
     }
 
+    test("implicit primitive conversions should work") {
+        import ConvertJson._
+        val j = JsonObject(
+            "address" -> JsonObject("city" -> "Copenhagen"),
+            "luckyNumbers" -> JsonArray(7, 13, 42)
+        )
+        assert(j("address", "city").flatMap(_.string) === Some("Copenhagen"))
+        assert((null : Json) === JsonNull)
+        assert((true : Json) === JsonBoolean(true))
+        assert((5 : Json) === JsonNumber(5))
+        assert((3.14 : Json) === JsonNumber(3.14))
+        assert(("foo" : Json) === JsonString("foo"))
+    }
+
     /*
     // This isn't really a test, it's more like a very naive benchmark. However, it does pass on my machine.
     // TODO: Write a proper benchmark and publish it
