@@ -445,7 +445,7 @@ case class ParseJsonException(message : String, line : Int, column : Int)
  *     "luckyNumbers" -> JsonArray(7, 13, 42)
  * )
  * val Some(city) = info("address", "city").string
- * val Some(lucky) = for(ns <- info("luckyNumbers"); n <- ns(1)) yield n.number
+ * val Some(lucky) = for(ns <- info("luckyNumbers"); n <- ns(1); l <- n.number) yield l
  * }}}
  * After running the above, `city == "Copenhagen"` and `lucky == 13`.
  */
