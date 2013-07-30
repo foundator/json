@@ -8,13 +8,13 @@ import java.nio.charset.Charset
  * This represents all valid JSON values, and is modelled closely after the json.org specification (RFC 4627).
  * Note that the order of the members in the JsonObject is preserved, though this is not required by the specification.
  */
-sealed abstract class Json
-case class  JsonObject  ( members  : (String, Json)* ) extends Json
-case class  JsonArray   ( elements : Json*           ) extends Json
-case class  JsonString  ( text     : String          ) extends Json
-case class  JsonNumber  ( number   : Double          ) extends Json
-case class  JsonBoolean ( value    : Boolean         ) extends Json
-case object JsonNull                                   extends Json
+sealed abstract class Json extends DynamicJsonOperations
+case class  JsonObject  ( value : (String, Json)* ) extends Json
+case class  JsonArray   ( value : Json*           ) extends Json
+case class  JsonString  ( value : String          ) extends Json
+case class  JsonNumber  ( value : Double          ) extends Json
+case class  JsonBoolean ( value : Boolean         ) extends Json
+case object JsonNull                                extends Json
 
 
 /**
@@ -149,14 +149,14 @@ object Json {
                     }
                     writeLine(level)
                     writer.write(']')
-                case JsonString(text) =>
-                    writeString(text)
+                case JsonString(string) =>
+                    writeString(string)
                 case JsonNumber(number) =>
                     val text = number.toString
                     if(text.startsWith(".")) writer.write('0')
                     writer.write(if(text.endsWith(".0")) text.dropRight(2) else text)
-                case JsonBoolean(value) =>
-                    writer.write(if(value) "true" else "false")
+                case JsonBoolean(boolean) =>
+                    writer.write(if(boolean) "true" else "false")
                 case JsonNull =>
                     writer.write("null")
             }
@@ -341,7 +341,7 @@ object Json {
                             } catch {
                                 case e : NumberFormatException => throw ParseJsonException(e.getMessage, line, column)
                             }
-                        case _ => throw ParseJsonException("Unknown escape sequence: \\" + current, line, column)
+                        case _ => throw ParseJsonException("Unknown escape sequence: \\" + current.toChar, line, column)
                     }
                     builder.append(result)
                 } else {
@@ -424,10 +424,77 @@ object Json {
 
         skipWhitespace()
         val result = readJson()
-        if(!allowMore && current != -1)  throw ParseJsonException("Expected end of file after the JSON value", line, column)
+        if(!allowMore && current != -1) throw ParseJsonException("Expected end of file after the JSON value", line, column)
         result
     }
 }
 
 case class ParseJsonException(message : String, line : Int, column : Int)
     extends RuntimeException(message + " at line " + line + ", column " + column)
+
+
+/**
+ * This base class is what adds querying to the Json data structure (beyond pattern matching).
+ * The act on the Json data structure as if it was dynamically typed, but returns the result in an `Option[T]` to regain
+ * type safety. This also allows us to use the for+yield monad syntax for querying.
+ *
+ * Some examples:
+ * {{{
+ * val info = JsonObject(
+ *     "address" -> JsonObject("city" -> "Copenhagen", "street" -> "Vesterbrogade"),
+ *     "luckyNumbers" -> JsonArray(7, 13, 42)
+ * )
+ * val Some(city) = info("address", "city").string
+ * val Some(lucky) = for(ns <- info("luckyNumbers"); n <- ns(1)) yield n.number
+ * }}}
+ * After running the above, `city == "Copenhagen"` and `lucky == 13`.
+ */
+sealed abstract class DynamicJsonOperations { this : Json =>
+    /**
+     * Lookup for JsonObjects. Returns None if the fields doesn't exist or this is not a JsonObject.
+     * Note that you can use multiple labels to reach deep into the object graph, eg. myJson("address", "city").
+     */
+    def apply(labels : String*) : Option[Json] = labels match {
+        case Seq() => Some(this)
+        case Seq(label, rest @ _*) => this match {
+            case JsonObject(members @ _*) => members.find { case (l, j) => l == label }.flatMap(_._2(rest : _*))
+            case _ => None
+        }
+    }
+    /** Indexing for JsonArrays. Returns None if the element doesn't exist or this is not a JsonArray. */
+    def apply(index : Int) : Option[Json] = this match {
+        case JsonArray(elements @ _*) => try {
+            Some(elements(index))
+        } catch {
+            case e : IndexOutOfBoundsException => None
+        }
+        case _ => None
+    }
+    /** Dynamic access to JsonObject members as a map. Returns None if this is not a JsonObject. */
+    def members : Option[Map[String, Json]] = this match {
+        case JsonObject(members @ _*) => Some(members.toMap)
+        case _ => None
+    }
+    /** Dynamic access to JsonArray elements as a list. Returns None if this is not a JsonArray. */
+    def elements : Option[List[Json]] = this match {
+        case JsonArray(elements @ _*) => Some(elements.toList)
+        case _ => None
+    }
+    /** Dynamic access to JsonString value. Returns None if this is not a JsonString. */
+    def string : Option[String] = this match {
+        case JsonString(string) => Some(string)
+        case _ => None
+    }
+    /** Dynamic access to JsonNumber value. Returns None if this is not a JsonNumber. */
+    def number : Option[Double] = this match {
+        case JsonNumber(number) => Some(number)
+        case _ => None
+    }
+    /** Dynamic access to JsonBoolean value. Returns None if this is not a JsonBoolean. */
+    def boolean : Option[Boolean] = this match {
+        case JsonBoolean(boolean) => Some(boolean)
+        case _ => None
+    }
+    /** Returns true if this == JsonNull, false otherwise */
+    def isNull = this == JsonNull
+}

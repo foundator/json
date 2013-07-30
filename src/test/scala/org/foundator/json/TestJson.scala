@@ -3,7 +3,7 @@ package org.foundator.json
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
-import java.io.{ByteArrayInputStream, OutputStreamWriter, ByteArrayOutputStream}
+import java.io.{File, ByteArrayInputStream, OutputStreamWriter, ByteArrayOutputStream}
 import java.nio.charset.Charset
 
 @RunWith(classOf[JUnitRunner])
@@ -57,4 +57,32 @@ class TestJson extends FunSuite {
         assert(e.line === 3)
         assert(e.column === 5)
     }
+
+    test("untyped indexing works and returns None where appropriate") {
+        assert(json7(1) === Some(json4))
+        assert(json7(2) === None)
+        assert(json11("z") === None)
+        assert(json11("y") === Some(json10))
+        assert(json11("y", "a") === Some(json3))
+    }
+
+    test("untyped access works") {
+        assert(json1.isNull)
+        assert(json2.boolean === Some(true))
+        assert(json0.number === Some(0.0))
+        assert(json4.string === Some("Hello \r\n\t\u0000\u0001\"\\ World! Æø"))
+        assert(json5.elements === Some(List()))
+        assert(json8.members === Some(Map()))
+    }
+
+    /*
+    // This isn't really a test, it's more like a very naive benchmark. However, it does pass on my machine.
+    // TODO: Write a proper benchmark and publish it
+    test("must quickly load a 22 megabyte file") {
+        val before = System.currentTimeMillis()
+        val json = Json.read(new File("documents.json"))
+        val after = System.currentTimeMillis()
+        assert(after - before < 10 * 1000)
+    }
+    */
 }
