@@ -31,8 +31,8 @@ In order to build up JSON values, simply use the above constructors, eg:
 
 ```scala
 val j = JsonObject(
-    "address" -> JsonObject("city" -> JsonString("Copenhagen")),
-    "luckyNumbers" -> JsonArray(JsonNumber(7), JsonNumber(13))
+    "address" -> JsonObject("city" -> "Copenhagen"),
+    "luckyNumbers" -> JsonArray(7, 13)
 )
 ```
 
@@ -51,10 +51,10 @@ For queries, you can either use plain old pattern matching on the `Json` data st
 
 The above methods return `None` if `j` is not an instance of the target type, or if the accessed element or member doesn't exist. Otherwise they return `Some(v)` where `v` is the value. The exception is `isNull`, which always returns a plain boolean.
 
-Since the `Option` type is a monad, you can also use the `for ... yield ...` syntax for querying:
+Since the `Option` type is a monad, you can use `flatMap` or the `for ... yield ...` syntax for querying:
 
 ```scala
-val Some(city) = j("address", "city").string
+val Some(city) = j("address", "city").flatMap(_.string)
 val Some(lucky) = for(ns <- j("luckyNumbers"); n <- ns(1); d <- n.number) yield d
 ```
 
