@@ -30,9 +30,9 @@ Usage
 In order to build up JSON values, simply use the above constructors, eg:
 
 ```scala
-val json = JsonObject(
-    "x" -> JsonString("hello"),
-    "y" -> JsonNumber(1)
+val j = JsonObject(
+    "address" -> JsonObject("city" -> JsonString("Copenhagen")),
+    "luckyNumbers" -> JsonArray(7, 13, 42)
 )
 ```
 
@@ -54,10 +54,6 @@ The above methods return `None` if `j` is not an instance of the target type, or
 Since the `Option` type is a monad, you can also use the `for ... yield ...` syntax for querying:
 
 ```scala
-val info = JsonObject(
-    "address" -> JsonObject("city" -> JsonString("Copenhagen")),
-    "luckyNumbers" -> JsonArray(7, 13, 42)
-)
 val Some(city) = info("address", "city").string
 val Some(lucky) = for(ns <- info("luckyNumbers"); n <- ns(1); d <- n.number) yield d
 ```
