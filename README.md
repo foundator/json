@@ -36,6 +36,12 @@ val j = JsonObject(
 )
 ```
 
+Note that we assume `import org.foundator.json.ConvertJson._` in the above, which will automatically convert the following primitive types to `Json`: `String`, `Double`, `Int`, `Boolean`, `Null`. This little bit of convenience goes a long way.
+
+
+Querying
+--------
+
 For queries, you can either use plain old pattern matching on the `Json` data structure, or you can use the following query methods:
 
 | Invocation | Target | Result | Description |
