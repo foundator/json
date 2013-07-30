@@ -8,7 +8,7 @@ import java.nio.charset.Charset
  * This represents all valid JSON values, and is modelled closely after the json.org specification (RFC 4627).
  * Note that the order of the members in the JsonObject is preserved, though this is not required by the specification.
  */
-sealed abstract class Json extends DynamicJsonOperations
+sealed abstract class Json extends QueryJson
 case class  JsonObject  ( value : (String, Json)* ) extends Json
 case class  JsonArray   ( value : Json*           ) extends Json
 case class  JsonString  ( value : String          ) extends Json
@@ -458,7 +458,7 @@ object ConvertJson {
  * }}}
  * After running the above, `city == "Copenhagen"` and `lucky == 13`.
  */
-sealed abstract class DynamicJsonOperations extends NotNull { this : Json =>
+sealed abstract class QueryJson extends NotNull { this : Json =>
     /**
      * Lookup for JsonObjects. Returns None if the fields doesn't exist or this is not a JsonObject.
      * Note that you can use multiple labels to reach deep into the object graph, eg. myJson("address", "city").
