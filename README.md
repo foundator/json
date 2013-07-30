@@ -54,8 +54,8 @@ The above methods return `None` if `j` is not an instance of the target type, or
 Since the `Option` type is a monad, you can also use the `for ... yield ...` syntax for querying:
 
 ```scala
-val Some(city) = info("address", "city").string
-val Some(lucky) = for(ns <- info("luckyNumbers"); n <- ns(1); d <- n.number) yield d
+val Some(city) = j("address", "city").string
+val Some(lucky) = for(ns <- j("luckyNumbers"); n <- ns(1); d <- n.number) yield d
 ```
 
 After running the above, `city == "Copenhagen"` and `lucky == 13`.
