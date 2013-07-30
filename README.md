@@ -75,7 +75,7 @@ You can either use plain old pattern matching on the `Json` data structure, or y
 
 | Invocation | Target | Result | Description |
 |------------|--------|--------|-------------|
-| `j("city", "address")` | `JsonObject` | `Option[Json]` | Accesses the "address" of the "city" field of `j`. |
+| `j("city", "address")` | `JsonObject` | `Option[Json]` | Accesses "address" of the "city" field of `j`. |
 | `j(0)` | `JsonArray` | `Option[Json]` | Accesses the first element of `j`. |
 | `j.members` | `JsonObject` | `Option[Map[String, Json]]` | Returns a map with all the members of `j`. |
 | `j.elements` | `JsonArray` | `Option[List[Json]]` | Returns a list with all the elements of `j`. |
@@ -85,6 +85,20 @@ You can either use plain old pattern matching on the `Json` data structure, or y
 | `j.isNull` | (any JSON) | `Boolean` | Returns true if `j == JsonNull`. |
 
 The above methods return `None` if `j` is not an instance of the target type, or if the accessed element or member doesn't exist. Otherwise they return `Some(v)` where `v` is the value. The exception is `isNull`, which always returns a plain boolean.
+
+Since the `Option` type is a monad, you can also use the `for ... yield ...` syntax for querying:
+
+```scala
+val info = JsonObject(
+    "address" -> JsonObject("city" -> "Copenhagen", "street" -> "Vesterbrogade"),
+    "luckyNumbers" -> JsonArray(7, 13, 42)
+)
+val Some(city) = info("address", "city").string
+val Some(lucky) = for(ns <- info("luckyNumbers"); n <- ns(1); d <- n.number) yield d
+```
+
+After running the above, `city == "Copenhagen"` and `lucky == 13`.
+
 
 Other JSON libraries
 ====================
