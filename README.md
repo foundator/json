@@ -12,13 +12,13 @@ Data Structure
 The data structure is modelled closely after the json.org specification (RFC 4627), and represents all valid JSON values. There's no magic:
 
 ```scala
-sealed abstract class Json
-case class  JsonObject  ( members  : (String, Json)* ) extends Json
-case class  JsonArray   ( elements : Json*           ) extends Json
-case class  JsonString  ( text     : String          ) extends Json
-case class  JsonNumber  ( number   : Double          ) extends Json
-case class  JsonBoolean ( value    : Boolean         ) extends Json
-case object JsonNull                                   extends Json
+sealed abstract class Json extends DynamicJsonOperations
+case class  JsonObject  ( value : (String, Json)* ) extends Json
+case class  JsonArray   ( value : Json*           ) extends Json
+case class  JsonString  ( value : String          ) extends Json
+case class  JsonNumber  ( value : Double          ) extends Json
+case class  JsonBoolean ( value : Boolean         ) extends Json
+case object JsonNull                                extends Json
 ```
 
 Note that the order of the members in the JsonObject is preserved, though this is not required by the specification.
@@ -30,13 +30,41 @@ Usage
 In order to build up JSON values, simply use the above constructors, eg:
 
 ```scala
-val json = JsonObject(
-    "x" -> JsonNumber(0),
-    "y" -> JsonNumber(1)
+val j = JsonObject(
+    "address" -> JsonObject("city" -> "Copenhagen"),
+    "luckyNumbers" -> JsonArray(7, 13)
 )
 ```
 
-You can of course also use pattern matching to extract values from a JSON data structure.
+Note that we assume `import org.foundator.json.ConvertJson._` in the above, which will automatically convert the following primitive types to `Json`: `String`, `Double`, `Int`, `Boolean` and `Null`. This little bit of convenience goes a long way.
+
+
+Querying
+--------
+
+For queries, you can either use plain old pattern matching on the `Json` data structure, or you can use the following query methods:
+
+| Invocation | Target | Result | Description |
+|------------|--------|--------|-------------|
+| `j("city", "address")` | `JsonObject` | `Option[Json]` | Accesses "address" of the "city" field of `j`. |
+| `j(0)` | `JsonArray` | `Option[Json]` | Accesses the first element of `j`. |
+| `j.members` | `JsonObject` | `Option[Map[String, Json]]` | Returns a map with all the members of `j`. |
+| `j.elements` | `JsonArray` | `Option[List[Json]]` | Returns a list with all the elements of `j`. |
+| `j.string` | `JsonString` | `Option[String]` | Returns the string inside `j`. |
+| `j.number` | `JsonNumber` | `Option[Double]` | Returns the double inside `j`. |
+| `j.boolean` | `JsonBoolean` | `Option[Boolean]` | Returns the boolean inside `j`. |
+| `j.isNull` | (any JSON) | `Boolean` | Returns true if `j == JsonNull`. |
+
+The above methods return `None` if `j` is not an instance of the target type, or if the accessed element or member doesn't exist. Otherwise they return `Some(v)` where `v` is the value. The exception is `isNull`, which always returns a plain boolean.
+
+Since the `Option` type is a monad, you can use `flatMap` or the `for ... yield ...` syntax for querying:
+
+```scala
+val Some(city) = j("address", "city").flatMap(_.string)
+val Some(lucky) = for(ns <- j("luckyNumbers"); n <- ns(1); d <- n.number) yield d
+```
+
+After running the above, `city == "Copenhagen"` and `lucky == 13`.
 
 
 Serialization
@@ -87,4 +115,4 @@ What happens if this project is abandoned?
 
 Nothing. This library already works and is feature complete. Its source and its binary are both hosted by 3rd parties that are very unlikely to disappear.
 
-Don't get me wrong. There are plenty of other functionality one might want when dealing with JSON, such as automatic conversion from and to user defined types, streaming and querying. However, these do not belong in the core JSON library - they should be in a separate library.
+Don't get me wrong. There are plenty of other functionality one might want when dealing with JSON, such as automatic conversion from and to user defined types and streaming. However, these do not belong in the core JSON library - they should be in a separate library.
