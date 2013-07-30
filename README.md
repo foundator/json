@@ -12,7 +12,7 @@ Data Structure
 The data structure is modelled closely after the json.org specification (RFC 4627), and represents all valid JSON values. There's no magic:
 
 ```scala
-sealed abstract class Json extends DynamicJsonOperations
+sealed abstract class Json extends QueryJson
 case class  JsonObject  ( value : (String, Json)* ) extends Json
 case class  JsonArray   ( value : Json*           ) extends Json
 case class  JsonString  ( value : String          ) extends Json
