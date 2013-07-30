@@ -55,7 +55,7 @@ Since the `Option` type is a monad, you can also use the `for ... yield ...` syn
 
 ```scala
 val info = JsonObject(
-    "address" -> JsonObject("city" -> "Copenhagen", "street" -> "Vesterbrogade"),
+    "address" -> JsonObject("city" -> JsonString("Copenhagen")),
     "luckyNumbers" -> JsonArray(7, 13, 42)
 )
 val Some(city) = info("address", "city").string
