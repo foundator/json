@@ -12,7 +12,7 @@ Data Structure
 The data structure is modelled closely after the json.org specification (RFC 4627), and represents all valid JSON values. There's no magic:
 
 ```scala
-sealed abstract class Json extends DynamicJsonOperations
+sealed abstract class Json extends QueryJson
 case class  JsonObject  ( value : (String, Json)* ) extends Json
 case class  JsonArray   ( value : Json*           ) extends Json
 case class  JsonString  ( value : String          ) extends Json
@@ -36,7 +36,36 @@ val j = JsonObject(
 )
 ```
 
-Note that we assume `import org.foundator.json.ConvertJson._` in the above, which will automatically convert the following primitive types to `Json`: `String`, `Double`, `Int`, `Boolean` and `Null`. This little bit of convenience goes a long way.
+Note that we assume `import org.foundator.json.ConvertJson._` in the above, which will automatically convert the following primitive types to `Json`: `String`, `Double`, `Int` and `Boolean`. This little bit of convenience goes a long way.
+
+
+Serialization
+-------------
+
+You can read and write JSON data structures via the `Json` object:
+
+
+```scala
+val compact = Json.write(j, None)
+val pretty = Json.write(j, Some("    "))
+Json.write(new File("myfile.json"), j, None)
+```
+
+* The first example returns the JSON as a string with no indentation or line breaks. 
+* The second example is similar, but pretty prints the JSON with the given 4 spaces of indentation.
+* The third example writes to a file instead. You can also write to a stream (UTF-8) or a writer (any encoding).
+
+
+Deserialization
+---------------
+
+```scala
+val a = Json.read(compact) // or pretty
+val b = Json.read(new File("myfile.json"))
+```
+
+* The first example reads the JSON data structure from the provided string. 
+* The second example reads from a file instead. You can also read from a stream (will detect UTF-8 and both endian variants of UTF-16 and UTF-32), or a reader.
 
 
 Querying
@@ -65,35 +94,6 @@ val Some(lucky) = for(ns <- j("luckyNumbers"); n <- ns(1); d <- n.number) yield 
 ```
 
 After running the above, `city == "Copenhagen"` and `lucky == 13`.
-
-
-Serialization
--------------
-
-You can read and write JSON data structures via the `Json` object:
-
-
-```scala
-val compact = Json.write(json, None)
-val pretty = Json.write(json, Some("    "))
-Json.write(new File("myfile.json"), json, None)
-```
-
-* The first example returns the JSON as a string with no indentation or line breaks. 
-* The second example is similar, but pretty prints the JSON with the given 4 spaces of indentation.
-* The third example writes to a file instead. You can also write to a stream (UTF-8) or a writer (any encoding).
-
-
-Deserialization
----------------
-
-```scala
-val a = Json.read(compact) // or pretty
-val b = Json.read(new File("myfile.json"))
-```
-
-* The first example reads the JSON data structure from the provided string. 
-* The second example reads from a file instead. You can also read from a stream (will detect UTF-8 and both endian variants of UTF-16 and UTF-32), or a reader.
 
 
 Other JSON libraries
