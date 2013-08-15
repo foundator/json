@@ -82,7 +82,7 @@ class TestJson extends FunSuite {
             "luckyNumbers" -> JsonArray(7, 13, 42)
         )
         assert(j("address", "city").flatMap(_.string) === Some("Copenhagen"))
-        assert((null : Json) === JsonNull)
+        assert(((null : String) : Json) === JsonNull)
         assert((true : Json) === JsonBoolean(true))
         assert((5 : Json) === JsonNumber(5))
         assert((3.14 : Json) === JsonNumber(3.14))

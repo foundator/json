@@ -2,6 +2,7 @@ package org.foundator.json
 
 import java.io._
 import java.nio.charset.Charset
+import scala.collection.mutable.ArrayBuffer
 
 
 /**
@@ -15,7 +16,6 @@ case class  JsonString  ( value : String          ) extends Json
 case class  JsonNumber  ( value : Double          ) extends Json
 case class  JsonBoolean ( value : Boolean         ) extends Json
 case object JsonNull                                extends Json
-
 
 /**
  * Contains serialization (write) an deserialization (read) methods for the JSON format.
@@ -268,7 +268,7 @@ object Json {
             if(current != '{') throw ParseJsonException("Expected an object { (left brace)", line, column)
             next()
             skipWhitespace()
-            var members = List[(String, Json)]()
+            val members = ArrayBuffer[(String, Json)]()
             var first = true
             while(current != '}') {
                 if(first) {
@@ -284,18 +284,18 @@ object Json {
                 next()
                 skipWhitespace()
                 val value = readJson()
-                members = (label -> value) :: members
+                members += (label -> value)
             }
             next()
             skipWhitespace()
-            JsonObject(members.reverse : _*)
+            JsonObject(members : _*)
         }
 
         def readArray() : Json = {
             if(current != '[') throw ParseJsonException("Expected an array [ (left bracket)", line, column)
             next()
             skipWhitespace()
-            var elements = List[Json]()
+            val elements = ArrayBuffer[Json]()
             var first = true
             while(current != ']') {
                 if(first) {
@@ -306,11 +306,11 @@ object Json {
                     skipWhitespace()
                 }
                 val value = readJson()
-                elements = value :: elements
+                elements += value
             }
             next()
             skipWhitespace()
-            JsonArray(elements.reverse : _*)
+            JsonArray(elements : _*)
         }
 
         def readString() : String = {
@@ -439,7 +439,6 @@ object ConvertJson {
     implicit def fromNumber(value : Double) : Json = JsonNumber(value)
     implicit def fromString(value : String) : Json = if(value == null) JsonNull else JsonString(value)
     implicit def fromBoolean(value : Boolean) : Json = JsonBoolean(value)
-    implicit def fromNull(value : Null) : Json = JsonNull
 }
 
 /**
@@ -458,7 +457,7 @@ object ConvertJson {
  * }}}
  * After running the above, `city == "Copenhagen"` and `lucky == 13`.
  */
-sealed abstract class QueryJson extends NotNull { this : Json =>
+sealed abstract class QueryJson { this : Json =>
     /**
      * Lookup for JsonObjects. Returns None if the fields doesn't exist or this is not a JsonObject.
      * Note that you can use multiple labels to reach deep into the object graph, eg. myJson("address", "city").

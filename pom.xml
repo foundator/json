@@ -20,7 +20,7 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>json</name>
-    <description>A simple and fast JSON library for Scala.</description>
+    <description>A simple JSON library for Scala.</description>
     <url>https://github.com/foundator/json</url>
     <licenses>
         <license>
@@ -59,6 +59,25 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
+        <!-- Benchmark -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.2.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.2.2</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- TODO: REMOVE -->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-reflect</artifactId>
+            <version>2.10.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -85,7 +104,7 @@
                 </configuration>
             </plugin>
 
-            <plugin>
+            <!--plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
                 <executions>
@@ -97,7 +116,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
