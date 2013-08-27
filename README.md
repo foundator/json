@@ -75,7 +75,7 @@ For queries, you can either use plain old pattern matching on the `Json` data st
 
 | Invocation | Target | Result | Description |
 |------------|--------|--------|-------------|
-| `j("city", "address")` | `JsonObject` | `Option[Json]` | Accesses "address" of the "city" field of `j`. |
+| `j("city", "address")` | `JsonObject` | `Option[Json]` | Accesses "city" of the "address" field of `j`. |
 | `j(0)` | `JsonArray` | `Option[Json]` | Accesses the first element of `j`. |
 | `j.members` | `JsonObject` | `Option[Map[String, Json]]` | Returns a map with all the members of `j`. |
 | `j.elements` | `JsonArray` | `Option[List[Json]]` | Returns a list with all the elements of `j`. |
