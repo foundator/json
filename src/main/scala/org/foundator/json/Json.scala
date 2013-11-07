@@ -88,7 +88,7 @@ object Json {
                 case '\n' => writer.write("\\n")
                 case '\r' => writer.write("\\r")
                 case '\t' => writer.write("\\t")
-                case _ if c < 0x1f => writer.write(f"\\u${c.toInt}%04x") // omg
+                case _ if c <= 0x1f => writer.write(f"\\u${c.toInt}%04x") // omg
                 case _ => writer.write(c)
             }
             writer.write('"')
