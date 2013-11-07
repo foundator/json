@@ -319,7 +319,7 @@ object Json {
             val builder = new StringBuilder()
             while(current != '"') {
                 if(current == -1) throw ParseJsonException("Unexpected end of file inside a string", line, column)
-                if(current.toChar <= 0x1f) throw ParseJsonException("Unescaped control character inside a string", line, column)
+                if(current.toChar <= 0x1f) throw ParseJsonException("Unescaped control character (decimal "+current+") inside a string", line, column)
                 if(current == '\\') {
                     val result = next() match {
                         case -1 => throw ParseJsonException("Unexpected end of file inside an escape sequence", line, column)
