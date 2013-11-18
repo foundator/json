@@ -88,7 +88,7 @@ object Json {
                 case '\n' => writer.write("\\n")
                 case '\r' => writer.write("\\r")
                 case '\t' => writer.write("\\t")
-                case _ if c.isControl => writer.write(f"\\u${c.toInt}%04x") // omg
+                case _ if c <= 0x1f => writer.write(f"\\u${c.toInt}%04x") // omg
                 case _ => writer.write(c)
             }
             writer.write('"')
@@ -319,7 +319,7 @@ object Json {
             val builder = new StringBuilder()
             while(current != '"') {
                 if(current == -1) throw ParseJsonException("Unexpected end of file inside a string", line, column)
-                if(current.toChar.isControl) throw ParseJsonException("Unescaped control character inside a string", line, column)
+                if(current.toChar <= 0x1f) throw ParseJsonException("Unescaped control character (decimal "+current+") inside a string", line, column)
                 if(current == '\\') {
                     val result = next() match {
                         case -1 => throw ParseJsonException("Unexpected end of file inside an escape sequence", line, column)
