@@ -102,17 +102,9 @@ Other JSON libraries
 And why I felt a new one was required.
 
 * Scala's standard JSON type: Uses `Any` to represent the JSON types `Number`, `String`, `Boolean` and `Null`, defeating type safety.
-* The Play JSON library: Has `JsUndefined` ... but there's no such thing in JSON! Also, is not a self-contained library - you have to depende on the whole Play framework.
+* The Play JSON library: Has `JsUndefined` ... but there's no such thing in JSON. Also, is not a self-contained library - you have to depend on the whole Play framework.
 * Argonaut: Has data structure much like the foundator-json library - unfortunately, it's off limits for library users, since it's private.
 * Jerkson: Has a data structure where `JField` can occur anywhere, even outside objects.
 * And many, many more.
 
-Many of these also expose a large and complex API, which is very strange given the triviality of the core problem.
-
-
-What happens if this project is abandoned?
-------------------------------------------
-
-Nothing. This library already works and is feature complete. Its source and its binary are both hosted by 3rd parties that are very unlikely to disappear.
-
-Don't get me wrong. There are plenty of other functionality one might want when dealing with JSON, such as automatic conversion from and to user defined types and streaming. However, these do not belong in the core JSON library - they should be in a separate library.
+Many of these also expose a large and complex API, which I think is unfortunate given the simplicity of JSON.
