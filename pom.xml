@@ -6,9 +6,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <gpg.passphrase />
-        <scala.version>2.11</scala.version>
-        <scala.fullVersion>2.11.2</scala.fullVersion>
     </properties>
 
     <groupId>org.foundator</groupId>
@@ -42,6 +39,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
                 <executions>
                     <execution>
                         <id>Install_jar_file</id>
@@ -54,7 +52,8 @@
                             <executable>sbt</executable>
                             <arguments>
                                 <argument>clean</argument>
-                                <argument>+publish-m2</argument>
+                                <argument>+publishLocal</argument>
+                                <argument>+publishM2</argument>
                             </arguments>
                         </configuration>
                     </execution>
