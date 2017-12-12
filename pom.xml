@@ -54,7 +54,7 @@
                             <executable>sbt</executable>
                             <arguments>
                                 <argument>clean</argument>
-                                <argument>+publish-m2</argument>
+                                <argument>+publishM2</argument>
                             </arguments>
                         </configuration>
                     </execution>
