@@ -19,7 +19,7 @@
 
     <groupId>org.foundator</groupId>
     <artifactId>foundator-json</artifactId>
-    <version>1.0.0</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>json</name>
     <description>A simple JSON library for Scala.</description>
