@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <gpg.passphrase />
         <scala.version>2.12</scala.version>
-        <scala.fullVersion>2.12.4</scala.fullVersion>
+        <scala.fullVersion>2.12.16</scala.fullVersion>
     </properties>
 
     <groupId>org.foundator</groupId>
